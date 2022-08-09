@@ -1,12 +1,31 @@
-name: learn-github-actions
+#Nesse workflow, o GitHub Actions verifica o código enviado, 
+#instala a estrutura de teste de bats e executa um comando básico 
+#para gerar a versão de bats: bats -v.
+
+# Como o nome do workflow irá aparecer na aba Ações do repositório de GitHub.
+name: learn-github-actions  
+# Especifica o gatilho para este workflow. Este exemplo usa o evento push.
 on: [push]
+# Agrupa todos os trabalhos executados no workflow learn-github-actions.
 jobs:
+  # Define uma tarefa chamada check-bats-version. As chaves secundaárias definirão as propriedades do trabalho.
   check-bats-version:
+    #  Significa que o trabalho será executado em uma nova máquina virtual Linux do Ubuntu hospedada pelo GitHub.
     runs-on: ubuntu-latest
+    # Agrupa todos os passos são executados no trabalho check-bats-version.
+    # Cada item aninhado nesta seção é uma action separada ou script shell.
     steps:
+      # A palavra-chave uses especifica que esta etapa irá executar v3 da action actions/checkout.
+      # Esta é uma action que faz o check-out do seu repositório para o runner.
+      # permitindo que você execute scripts ou outras ações com base no seu código. 
       - uses: actions/checkout@v3
+      # Essa etapa usa a action de actions/setup-node@v3 para instalar a versão 14 do Node.js.
+      # Isso coloca os dois comandos node e npm no seu PATH.
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
+      # A palavra-chave run diz ao job para executar um comando no runner.
+      # Neste caso, você está usando o npm para instalar o pacote de teste do software bats.
       - run: npm install -g bats
+      # Por fim, você executará o comando bats com um parâmetro que produz a versão do software.
       - run: bats -v
